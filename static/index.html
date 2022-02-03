@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="../public/static/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../public/static/favicon.png" type="image/x-icon">
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+        integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
+    <title>POST</title>
+    <script>
+        $(document).ready(function () {
+            get_posts()
+        })
+
+        function get_posts() {
+            $("#postsTable tbody").empty()
+
+            $.ajax({
+                type: "GET",
+                url: `/api/posts`,
+                data: {},
+                success: function (response) {
+                    let posts = response["posts"]
+                    console.log(posts)
+                    for (let i = 0; i < posts.length; i++) {
+                        post_list(posts[i], i)
+                    }
+                }
+            })
+
+        }
+
+        function post_list(post, i) {
+
+            let title = post['postTitle'].substring(0, 20)
+
+            let htmlTemp = `<tr>
+                                <th scope="row">${i + 1}</th>
+                                <td><a onclick="location.href='/detail.html?postId=${post["postId"]}'">${post['postAuthor']}</a></td>
+                                <td><a onclick="location.href='/detail.html?postId=${post["postId"]}'">${title}</a></td>
+                                <td><a onclick="location.href='/detail.html?postId=${post["postId"]}'">${post['postDate']}</a></td>
+                                
+                            </tr>`
+            $("#postsTable tbody").append(htmlTemp)
+        }
+        function logout() {
+            
+            localStorage.clear();
+
+            window.location.href("/");
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Just an image -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="">
+                <h1>POST</h1>
+            </a>
+
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a id="button-logout" class="button is-primary" href="">
+                            <strong onclick="logout()">로그아웃</strong>
+                        </a>
+                        <a id="button-login" class="button is-primary" href="/login.html">
+                            <strong>로그인</strong>
+                        </a>
+                        <a class="button is-primary" href="/create.html">
+                            <strong>글쓰기</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="" id="">
+        <table class="table" id="postsTable" style="width: 80%; margin: auto;">
+            <thead id="post-bar">
+                <tr>
+                    <th>번호</th>
+                    <th>작성자</th>
+                    <th>제목</th>
+                    <th>작성날짜</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+
+        </table>
+
+    </div>
+</body>
+
+</html>
